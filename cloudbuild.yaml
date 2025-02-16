@@ -1,25 +1,25 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: 
+    args:
       - 'build'
       - '-t'
       - 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA'
       - '.'
 
   - name: 'gcr.io/cloud-builders/docker'
-    args: 
+    args:
       - 'push'
       - 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA'
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'  # ✅ Use a lightweight Cloud SDK image
-    entrypoint: '/bin/bash'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'  # ✅ Use the Slim image
+    entrypoint: '/bin/sh'
     args:
       - '-c'
-      - >
-        gcloud run deploy saquib-100949697-service
-        --image=us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA
-        --region=us-central1
-        --allow-unauthenticated
+      - |
+        gcloud run deploy saquib-100949697-service \
+          --image=us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA \
+          --region=us-central1 \
+          --allow-unauthenticated
 
 options:
-  logging: 'CLOUD_LOGGING_ONLY'  # ✅ Ensure correct YAML formatting
+  logging: 'CLOUD_LOGGING_ONLY'
