@@ -14,8 +14,10 @@ app.post('/items', addItem);
 app.put('/items/:id', updateItem);
 app.delete('/items/:id', deleteItem);
 
+const PORT = process.env.PORT || 8080;  // ✅ Use Cloud Run’s PORT environment variable
+
 db.init().then(() => {
-    app.listen(3000, () => console.log('Listening on port 3000'));
+    app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
 }).catch((err) => {
     console.error(err);
     process.exit(1);
