@@ -4,7 +4,7 @@ steps:
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA']
-    
+
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     args: [
       'run', 'deploy', 'saquib-100949697-service',
@@ -14,4 +14,6 @@ steps:
     ]
 
 options:
-  defaultLogsBucketBehavior: REGIONAL_USER_OWNED_BUCKET
+  logging: CLOUD_LOGGING_ONLY
+  requestedVerifyOption: VERIFIED
+  loggingBucket: 'cloud-build-logs-deft-station-448022-u5'  # ✅ Add your bucket name here
