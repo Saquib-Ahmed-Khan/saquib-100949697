@@ -14,21 +14,25 @@ app.post('/items', addItem);
 app.put('/items/:id', updateItem);
 app.delete('/items/:id', deleteItem);
 
-const PORT = process.env.PORT || 8080;  // ✅ Use Cloud Run’s PORT environment variable
+const PORT = process.env.PORT || 8080;  // ✅ Cloud Run will set the PORT dynamically
 
-db.init().then(() => {
-    app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
-}).catch((err) => {
-    console.error(err);
-    process.exit(1);
-});
+db.init()
+    .then(() => {
+        app.listen(PORT, () => console.log(`✅ Server is running on port ${PORT}`));
+    })
+    .catch((err) => {
+        console.error("❌ Database initialization failed:", err);
+        process.exit(1);
+    });
 
 const gracefulShutdown = () => {
+    console.log("⚠️ Shutting down server...");
     db.teardown()
-        .catch(() => {})
+        .catch((err) => console.error("❌ Error during shutdown:", err))
         .then(() => process.exit());
 };
 
+// ✅ Handle graceful shutdowns for Cloud Run & Nodemon
 process.on('SIGINT', gracefulShutdown);
 process.on('SIGTERM', gracefulShutdown);
-process.on('SIGUSR2', gracefulShutdown); // Sent by nodemon
+process.on('SIGUSR2', gracefulShutdown);  // Sent by nodemon
