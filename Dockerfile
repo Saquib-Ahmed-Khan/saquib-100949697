@@ -1,17 +1,24 @@
-# Use an official Node.js runtime as a parent image
-FROM node:18
+# Use a smaller Node.js runtime for better performance
+FROM node:18-slim
 
 # Set the working directory inside the container
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY package*.json ./
+# Copy only package.json and package-lock.json to leverage Docker caching
+COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm install
+# Install dependencies (production only)
+RUN npm ci --only=production
 
 # Copy the rest of the application files
 COPY . .
+
+# Set environment variable for Cloud Run
+ENV PORT=8080
+
+# Create and switch to a non-root user
+RUN useradd --create-home appuser
+USER appuser
 
 # Expose the port the app runs on
 EXPOSE 8080
