@@ -1,6 +1,6 @@
 steps:
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA', '.']
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA', './Dockerfile', '.']
 
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA']
