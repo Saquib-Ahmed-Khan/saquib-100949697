@@ -6,12 +6,14 @@ steps:
     args: ['push', 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA']
 
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-  entrypoint: gcloud
-  args: ['run', 'deploy', 'saquib-100949697-service', 
-         '--image=us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA',
-         '--region=us-central1', '--allow-unauthenticated']
-
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'saquib-100949697-service'
+      - '--image=us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA'
+      - '--region=us-central1'
+      - '--allow-unauthenticated'
 
 options:
-  logging: CLOUD_LOGGING_ONLY  # ✅ Keep only this valid option
-  requestedVerifyOption: VERIFIED
+  logging: CLOUD_LOGGING_ONLY
