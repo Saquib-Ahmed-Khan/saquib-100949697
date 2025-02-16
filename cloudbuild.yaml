@@ -11,15 +11,15 @@ steps:
       - 'push'
       - 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA'
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'gcloud'  # ✅ Ensure entrypoint is a string
-    args: 
-      - 'run'
-      - 'deploy'
-      - 'saquib-100949697-service'
-      - '--image=us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA'
-      - '--region=us-central1'
-      - '--allow-unauthenticated'
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'  # ✅ Use a lightweight Cloud SDK image
+    entrypoint: '/bin/bash'
+    args:
+      - '-c'
+      - >
+        gcloud run deploy saquib-100949697-service
+        --image=us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA
+        --region=us-central1
+        --allow-unauthenticated
 
 options:
   logging: 'CLOUD_LOGGING_ONLY'  # ✅ Ensure correct YAML formatting
