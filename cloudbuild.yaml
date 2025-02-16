@@ -1,18 +1,23 @@
 steps:
+  # 1️⃣ Build the Docker Image
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA', '.']
 
+  # 2️⃣ Push the Image to Artifact Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA']
 
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: 'bash'
+  # 3️⃣ Deploy to Cloud Run using Google Cloud SDK (THIS IS THE NEW STEP 🚀)
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'  # ✅ Uses Cloud SDK container
+    entrypoint: 'gcloud'  # ✅ Specifies entrypoint for gcloud CLI
     args:
-      - '-c'
-      - |
-        gcloud run deploy saquib-100949697-service \
-          --image=us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA \
-          --region=us-central1 \
-          --allow-unauthenticated
+      - 'run'
+      - 'deploy'
+      - 'saquib-100949697-service'  # ✅ Your Cloud Run service name
+      - '--image=us-central1-docker.pkg.dev/deft-station-448022-u5/saquib-100949697/app:$COMMIT_SHA'
+      - '--region=us-central1'  # ✅ Ensure this matches your deployment region
+      - '--platform=managed'  # ✅ Use Google-managed Cloud Run
+      - '--allow-unauthenticated'  # ✅ Publicly accessible service
+
 options:
-  logging: CLOUD_LOGGING_ONLY
+  logging: CLOUD_LOGGING_ONLY  # ✅ Sends logs to Cloud Logging
